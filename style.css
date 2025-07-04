@@ -1,27 +1,3 @@
-html
-{
-    background-color:rgb(153, 252, 219);
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.greeting
-{
-    font-size: 30px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.introduction
-{
-    font-size: 20px;
-}
-
-.surprise
-{
-    background-color: rgb(190, 149, 0);
-}
-
-p
-{
-    font-weight: normal;
+div[class="test"] {
+    color: red;
 }
