@@ -1,0 +1,22 @@
+{
+  "name": "movie-review-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickytang666/rickyboba.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rickytang666/rickyboba.github.io/issues"
+  },
+  "homepage": "https://github.com/rickytang666/rickyboba.github.io#readme"
+}
