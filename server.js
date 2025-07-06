@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import reviews from "./api/reviews.route.js";
+
 // Load environment variables
 dotenv.config();
 
@@ -10,8 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files
+// Serve static files first
 app.use(express.static('public'));
+
+app.use("/api/v1/reviews", reviews);
 
 const API_KEY = process.env.TMDB_API_KEY;
 
@@ -36,9 +40,12 @@ app.get('/api/movies', async (req, res) => {
     }
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+// Catch-all route for API endpoints not found
+app.use("/api/*", (req, res) => res.status(404).json({error: "API endpoint not found"}));
+
+// Catch-all route - serve index.html for any other routes (for SPA support)
+app.use("*", (req, res) => {
+    res.sendFile("index.html", { root: "public" });
 });
 
 export default app;
