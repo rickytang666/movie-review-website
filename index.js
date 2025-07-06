@@ -13,30 +13,41 @@ const uri = `mongodb+srv://${mongo_username}:${mongo_password}@cluster0.e7myhyk.
 
 const port = process.env.PORT || 3000;
 
-// Try to connect to MongoDB, but don't fail if it doesn't work
-MongoClient.connect(
-    uri,
-    {
-        maxPoolSize: 50,
-        wtimeoutMS: 2500,
-        serverSelectionTimeoutMS: 5000,
-        retryWrites: true
-    })
-    .then(async client => {
-        console.log('Connected to MongoDB successfully!');
-        await ReviewsDAO.injectDB(client);
-        startServer();
-    })
-    .catch(err => {
-        console.warn('MongoDB connection failed, starting server without database:');
-        console.warn(err.message);
-        console.warn('Reviews functionality will be limited.');
-        startServer();
-    });
+// Initialize database connection
+let dbConnected = false;
 
-function startServer() {
-    app.listen(port, () => {
-        console.log(`Server listening on port ${port}`);
-        console.log(`Visit http://localhost:${port} to access the movie review website`);
+async function initDB() {
+    if (!dbConnected) {
+        try {
+            const client = await MongoClient.connect(uri, {
+                maxPoolSize: 50,
+                wtimeoutMS: 2500,
+                serverSelectionTimeoutMS: 5000,
+                retryWrites: true
+            });
+            console.log('Connected to MongoDB successfully!');
+            await ReviewsDAO.injectDB(client);
+            dbConnected = true;
+        } catch (err) {
+            console.warn('MongoDB connection failed:');
+            console.warn(err.message);
+            console.warn('Reviews functionality will be limited.');
+        }
+    }
+}
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    initDB().then(() => {
+        app.listen(port, () => {
+            console.log(`Server listening on port ${port}`);
+            console.log(`Visit http://localhost:${port} to access the movie review website`);
+        });
     });
+}
+
+// For Vercel serverless deployment
+export default async function handler(req, res) {
+    await initDB();
+    return app(req, res);
 }
