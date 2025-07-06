@@ -3,6 +3,7 @@
 const APILINK = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=eb235cb686049d81abc6049b6b518e2f&page=1';
 const IMG_PATH = 'https://image.tmdb.org/t/p/original';
 const SEARCHAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=eb235cb686049d81abc6049b6b518e2f&query=';
+const DEFAULT_IMG = 'https://moviereelist.com/wp-content/uploads/2019/07/poster-placeholder.jpg';
 
 const main = document.getElementById("section");
 const form = document.getElementById("form");
@@ -32,7 +33,7 @@ function returnMovies(url) {
                 title.setAttribute('id', 'title');
 
                 title.innerHTML = `${element.title}`;
-                image.src = IMG_PATH + element.poster_path;
+                image.src = image.src = element.poster_path ? (IMG_PATH + element.poster_path) : DEFAULT_IMG;
 
                 div_card.appendChild(image);
                 div_card.appendChild(title);
